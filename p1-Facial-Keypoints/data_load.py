@@ -2,11 +2,13 @@ import glob
 import os
 import torch
 from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms
 import numpy as np
 import matplotlib.image as mpimg
 import pandas as pd
 import cv2
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class FacialKeypointsDataset(Dataset):
     """Face Landmarks dataset."""
@@ -157,5 +159,12 @@ class ToTensor(object):
         # torch image: C X H X W
         image = image.transpose((2, 0, 1))
         
-        return {'image': torch.from_numpy(image),
-                'keypoints': torch.from_numpy(key_pts)}
+        return {'image': torch.from_numpy(image).to(device),
+                'keypoints': torch.from_numpy(key_pts).to(device)}
+
+
+
+
+
+
+
